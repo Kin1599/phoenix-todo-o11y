@@ -25,6 +25,15 @@ services:
     env_file:
       - .env
     restart: unless-stopped
-
+  
+  load-generator:
+    build:
+      context: ./apps/load-generator
+    depends_on:
+      - app
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+    
 volumes:
   cockroach-data:
