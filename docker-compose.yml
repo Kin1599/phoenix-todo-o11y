@@ -1,0 +1,30 @@
+
+services:
+  db:
+    image: cockroachdb/cockroach:latest-v23.2
+    command: start-single-node --insecure
+    ports:
+      - "26257:26257"
+      - "8080:8080"
+    volumes:
+      - cockroach-data:/cockroach/cockroach-data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health?ready=1"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+  
+  app:
+    build:
+      context: ./apps/todo_task_manager
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env
+    restart: unless-stopped
+
+volumes:
+  cockroach-data:
