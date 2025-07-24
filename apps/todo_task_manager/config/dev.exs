@@ -2,13 +2,10 @@ import Config
 
 # Configure your database
 config :todo_task_manager, TodoTaskManager.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "todo_task_manager_dev",
-  stacktrace: true,
+  url: System.get_env("DATABASE_URL") || "ecto://root@localhost:26257/todo_task_manager_dev",
   show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+  migration_lock: nil
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -23,7 +20,7 @@ config :todo_task_manager, TodoTaskManagerWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "wCyGZzD2VJDsw+njQcm8FGAbcFmgTThhsitPoDiP8YEUQYI7pOQDQqWOKPUdGnA4",
+  secret_key_base: System.get_env("SECRET_KEY_BASE") || "OgibHcdd4e29jaW2+ox1jKxrWLe5vFdal6aAO95Cl3/NV6CWZPunKf3NrEz3TJwR",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:todo_task_manager, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:todo_task_manager, ~w(--watch)]}

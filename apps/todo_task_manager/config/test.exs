@@ -17,7 +17,7 @@ config :todo_task_manager, TodoTaskManager.Repo,
 # you can enable the server option below.
 config :todo_task_manager, TodoTaskManagerWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "yb8VSOQSlYXMEHUBcSZ8xsHnzbJ82I/usbQBmRNb1Y1ClvUwLl2KxIJGnHncOCND",
+  secret_key_base: "JkSinpQ/mCyeAxijcIW7vO61OeMS1ZJKOn8Mvo1igpsgPpXcMeHe48zTf/CU0j7S",
   server: false
 
 # Print only warnings and errors during test

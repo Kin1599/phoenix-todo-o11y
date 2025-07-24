@@ -1,6 +1,7 @@
 defmodule TodoTaskManagerWeb.Router do
   use TodoTaskManagerWeb, :router
 
+  # --- браузерные маршруты ---
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -10,28 +11,45 @@ defmodule TodoTaskManagerWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  # --- публичный API ---
   pipeline :api do
     plug :accepts, ["json"]
   end
 
+  # --- API с авторизацией (JWT) ---
+  pipeline :api_auth do
+    plug :accepts, ["json"]
+    plug TodoTaskManagerWeb.Plugs.Auth
+  end
+
+  # --- веб-маршруты (например, домашняя страница) ---
   scope "/", TodoTaskManagerWeb do
     pipe_through :browser
 
     get "/", PageController, :home
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", TodoTaskManagerWeb do
-  #   pipe_through :api
-  # end
+  # --- публичный API ---
+  scope "/api", TodoTaskManagerWeb do
+    pipe_through :api
 
-  # Enable LiveDashboard in development
+    get "/ping", PingController, :index
+    post "/register", RegistrationController, :create
+    post "/login", SessionController, :create
+  end
+
+  # --- защищённый API ---
+  scope "/api", TodoTaskManagerWeb do
+    pipe_through :api_auth
+
+    get "/tasks", TaskApiController, :index
+    post "/tasks", TaskApiController, :create
+    put "/tasks/:id", TaskApiController, :update
+    delete "/tasks/:id", TaskApiController, :delete_task
+  end
+
+  # --- LiveDashboard (в разработке) ---
   if Application.compile_env(:todo_task_manager, :dev_routes) do
-    # If you want to use the LiveDashboard in production, you should put
-    # it behind authentication and allow only admins to access it.
-    # If your application does not have an admins-only section yet,
-    # you can use Plug.BasicAuth to set up some basic authentication
-    # as long as you are also using SSL (which you should anyway).
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do
@@ -39,5 +57,31 @@ defmodule TodoTaskManagerWeb.Router do
 
       live_dashboard "/dashboard", metrics: TodoTaskManagerWeb.Telemetry
     end
+  end
+
+  # --- Swagger UI ---
+  forward "/swagger", PhoenixSwagger.Plug.SwaggerUI,
+    otp_app: :todo_task_manager,
+    swagger_file: "swagger.json"
+
+  # --- Swagger Info ---
+  def swagger_info do
+    %{
+      info: %{
+        version: "1.0.0",
+        title: "Todo Task Manager API"
+      },
+      schemes: ["http"],
+      basePath: "/",
+      consumes: ["application/json"],
+      produces: ["application/json"],
+      securityDefinitions: %{
+        Bearer: %{
+          type: "apiKey",
+          name: "authorization",
+          in: "header"
+        }
+      }
+    }
   end
 end

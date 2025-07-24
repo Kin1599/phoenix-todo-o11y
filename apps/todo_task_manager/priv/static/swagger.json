@@ -1,0 +1,487 @@
+{
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "authorization",
+      "in": "header"
+    }
+  },
+  "basePath": "/",
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "swagger": "2.0",
+  "paths": {
+    "/api/tasks/{id}": {
+      "put": {
+        "tags": [
+          "TaskApi"
+        ],
+        "summary": "Update task",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Task"
+            },
+            "description": "Updated task"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "name": "id",
+            "in": "path",
+            "description": "Task ID"
+          },
+          {
+            "schema": {
+              "$ref": "#/definitions/TaskUpdate"
+            },
+            "required": true,
+            "name": "body",
+            "in": "body",
+            "description": "Task update params"
+          }
+        ],
+        "operationId": "TodoTaskManagerWeb.TaskApiController.update",
+        "description": "Update task fields"
+      },
+      "delete": {
+        "tags": [
+          "TaskApi"
+        ],
+        "summary": "Delete task",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/TaskDelete"
+            },
+            "description": "OK"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "name": "id",
+            "in": "path",
+            "description": "Task ID"
+          }
+        ],
+        "operationId": "TodoTaskManagerWeb.TaskApiController.delete_task",
+        "description": "Delete a user's task"
+      }
+    },
+    "/api/tasks": {
+      "post": {
+        "tags": [
+          "TaskApi"
+        ],
+        "summary": "Create task",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Task"
+            },
+            "description": "Created task"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/definitions/TaskCreate"
+            },
+            "required": true,
+            "name": "body",
+            "in": "body",
+            "description": "Task data"
+          }
+        ],
+        "operationId": "TodoTaskManagerWeb.TaskApiController.create",
+        "description": "Create a new task for user"
+      },
+      "get": {
+        "tags": [
+          "TaskApi"
+        ],
+        "summary": "List all tasks for user",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "200": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Task"
+              }
+            },
+            "description": "List of tasks"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "operationId": "TodoTaskManagerWeb.TaskApiController.index",
+        "description": "Returns tasks of authenticated user"
+      }
+    },
+    "/api/register": {
+      "post": {
+        "tags": [
+          "Registration"
+        ],
+        "summary": "User registration",
+        "responses": {
+          "400": {
+            "description": "Validation error"
+          },
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            },
+            "description": "User created"
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/definitions/UserRegister"
+            },
+            "required": true,
+            "name": "body",
+            "in": "body",
+            "description": "User registration params"
+          }
+        ],
+        "operationId": "TodoTaskManagerWeb.RegistrationController.create",
+        "description": "Creates a new user with email and password"
+      }
+    },
+    "/api/ping": {
+      "get": {
+        "tags": [
+          "Ping"
+        ],
+        "summary": "Ping health check",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/PingResponse"
+            },
+            "description": "OK"
+          }
+        },
+        "parameters": [],
+        "operationId": "TodoTaskManagerWeb.PingController.index",
+        "description": "Returns status and timestamp"
+      }
+    },
+    "/api/login": {
+      "post": {
+        "tags": [
+          "Session"
+        ],
+        "summary": "User login",
+        "responses": {
+          "401": {
+            "description": "Invalid credentials"
+          },
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/TokenResponse"
+            },
+            "description": "Token"
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/definitions/LoginRequest"
+            },
+            "required": true,
+            "name": "body",
+            "in": "body",
+            "description": "User credentials"
+          }
+        ],
+        "operationId": "TodoTaskManagerWeb.SessionController.create",
+        "description": "Authenticate user and return JWT token"
+      }
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "definitions": {
+    "TokenResponse": {
+      "type": "object",
+      "title": "TokenResponse",
+      "required": [
+        "token"
+      ],
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "JWT token"
+        }
+      },
+      "example": {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      }
+    },
+    "LoginRequest": {
+      "type": "object",
+      "title": "LoginRequest",
+      "required": [
+        "password",
+        "email"
+      ],
+      "properties": {
+        "password": {
+          "type": "string",
+          "description": "Password"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email"
+        }
+      },
+      "example": {
+        "password": "verysecret",
+        "email": "user@example.com"
+      }
+    },
+    "UserResponse": {
+      "type": "object",
+      "title": "UserResponse",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "User ID"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email"
+        }
+      },
+      "example": {
+        "id": "6f1b3a66-1234-4567-89ab-0cffe07d0001",
+        "email": "user@example.com"
+      },
+      "description": "User creation result"
+    },
+    "UserRegister": {
+      "type": "object",
+      "title": "UserRegister",
+      "required": [
+        "password",
+        "email"
+      ],
+      "properties": {
+        "password": {
+          "type": "string",
+          "description": "Password"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email"
+        }
+      },
+      "example": {
+        "password": "verysecret",
+        "email": "user@example.com"
+      },
+      "description": "Params for user registration"
+    },
+    "PingResponse": {
+      "type": "object",
+      "title": "PingResponse",
+      "required": [
+        "timestamp",
+        "status"
+      ],
+      "properties": {
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status"
+        }
+      },
+      "example": {
+        "timestamp": "2024-07-24T20:20:20Z",
+        "status": "ok"
+      }
+    },
+    "TaskDelete": {
+      "type": "object",
+      "title": "TaskDelete",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Confirmation message"
+        }
+      },
+      "example": {
+        "message": "Task deleted"
+      },
+      "description": "Task deletion confirmation"
+    },
+    "TaskUpdate": {
+      "type": "object",
+      "title": "TaskUpdate",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description"
+        }
+      },
+      "example": {
+        "title": "Read docs UPDATED",
+        "status": "done"
+      },
+      "description": "Task update schema"
+    },
+    "TaskCreate": {
+      "type": "object",
+      "title": "TaskCreate",
+      "required": [
+        "title"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description"
+        }
+      },
+      "example": {
+        "title": "Read docs",
+        "status": "pending",
+        "description": "Learn Phoenix Swagger"
+      },
+      "description": "Task creation schema"
+    },
+    "Task": {
+      "type": "object",
+      "title": "Task",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": "User ID"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Updated at"
+        },
+        "title": {
+          "type": "string",
+          "description": "Title"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status"
+        },
+        "inserted_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Created at"
+        },
+        "id": {
+          "type": "string",
+          "description": "Task ID"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description"
+        }
+      },
+      "example": {
+        "user_id": "b2a1c3d4-5678-90ab-cdef-1234567890ab",
+        "updated_at": "2025-07-24T20:20:20Z",
+        "title": "Read docs",
+        "status": "pending",
+        "inserted_at": "2025-07-24T20:20:20Z",
+        "id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+        "description": "Learn Phoenix Swagger"
+      },
+      "description": "Task schema"
+    }
+  },
+  "host": "localhost:4000",
+  "info": {
+    "title": "Todo Task Manager API",
+    "version": "1.0.0"
+  }
+}

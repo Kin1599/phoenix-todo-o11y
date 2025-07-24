@@ -9,7 +9,29 @@ import Config
 
 config :todo_task_manager,
   ecto_repos: [TodoTaskManager.Repo],
-  generators: [timestamp_type: :utc_datetime]
+  generators: [timestamp_type: :utc_datetime],
+  migration_primary_key: [type: :binary_id],
+  migration_foreign_key: [type: :binary_id]
+
+config :todo_task_manager, TodoTaskManager.Repo,
+  migration_primary_key: [type: :binary_id],
+  migration_foreign_key: [type: :binary_id]
+
+config :ecto,
+  primary_key_type: :binary_id,
+  foreign_key_type: :binary_id
+
+config :todo_task_manager, :phoenix_swagger,
+  swagger_files: %{
+    "priv/static/swagger.json" => [
+      router: TodoTaskManagerWeb.Router,
+      endpoint: TodoTaskManagerWeb.Endpoint
+    ]
+  }
+
+config :todo_task_manager, TodoTaskManager.Guardian,
+  issuer: "todo_task_manager",
+  secret_key: "kq3dA2jVtIlQ0A3eLoZp9RyspnScyUz2rC1yq1VgrUR0EzpZ6Nn62w=="
 
 # Configures the endpoint
 config :todo_task_manager, TodoTaskManagerWeb.Endpoint,
@@ -20,7 +42,7 @@ config :todo_task_manager, TodoTaskManagerWeb.Endpoint,
     layout: false
   ],
   pubsub_server: TodoTaskManager.PubSub,
-  live_view: [signing_salt: "HBwHEO7J"]
+  live_view: [signing_salt: "O3JBL/Bf"]
 
 # Configure esbuild (the version is required)
 config :esbuild,

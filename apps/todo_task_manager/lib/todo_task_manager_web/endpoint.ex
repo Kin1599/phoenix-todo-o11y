@@ -7,7 +7,7 @@ defmodule TodoTaskManagerWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_todo_task_manager_key",
-    signing_salt: "r9mWtrOd",
+    signing_salt: "Oxnq2W2J",
     same_site: "Lax"
   ]
 

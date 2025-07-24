@@ -107,6 +107,17 @@ defmodule TodoTaskManagerWeb do
     end
   end
 
+  def view do
+    quote do
+      use Phoenix.View, root: "lib/todo_task_manager_web/templates", namespace: TodoTaskManagerWeb
+
+      # Add this for Swagger
+      use PhoenixSwagger.PhoenixView
+
+      # остальные импорты...
+    end
+  end
+
   @doc """
   When used, dispatch to the appropriate controller/live_view/etc.
   """
