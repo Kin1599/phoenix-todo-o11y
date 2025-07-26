@@ -113,7 +113,11 @@ func handleWebSocket(c *gin.Context) {
 	duration := time.Duration(req.Duration) * time.Second
 	resCh := profileAttack(attacker, targeter, req.LoadProfile, req.RPS, duration)
 
-	var total, success, fail uint64
+	var (
+		metrics      vegeta.Metrics
+		successCount uint64
+		failCount    uint64
+	)
 	ticker := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()
 	done := make(chan struct{})
@@ -123,16 +127,20 @@ func handleWebSocket(c *gin.Context) {
 		for {
 			select {
 			case <-ticker.C:
-				newTotal := total
+				newTotal := metrics.Requests
 				delta := newTotal - lastTotal
 				lastTotal = newTotal
 				currentRPS.Store(delta)
 				rpsGauge.Set(float64(delta))
 
+				total := newTotal
+				success := atomic.LoadUint64(&successCount)
+				fail := atomic.LoadUint64(&failCount)
 				successRate := 0.0
 				if total > 0 {
 					successRate = (float64(success) / float64(total)) * 100
 				}
+
 				conn.WriteJSON(MetricsMessage{
 					Total:       total,
 					Success:     success,
@@ -148,28 +156,34 @@ func handleWebSocket(c *gin.Context) {
 	}()
 
 	for res := range resCh {
-		total++
+		metrics.Add(res)
 		requestsTotal.Inc()
 		latencyHistogram.Observe(res.Latency.Seconds())
+
 		if res.Code >= 200 && res.Code < 300 {
-			success++
+			atomic.AddUint64(&successCount, 1)
 			requestsSuccess.Inc()
 		} else {
-			fail++
+			atomic.AddUint64(&failCount, 1)
 			requestsFail.Inc()
 		}
 	}
+	metrics.Close()
 	close(done)
 
+	total := metrics.Requests
+	success := atomic.LoadUint64(&successCount)
+	fail := atomic.LoadUint64(&failCount)
 	successRate := 0.0
 	if total > 0 {
 		successRate = (float64(success) / float64(total)) * 100
 	}
+
 	conn.WriteJSON(MetricsMessage{
 		Total:       total,
 		Success:     success,
 		Fail:        fail,
-		RPS:         int(currentRPS.Load()),
+		RPS:         int(metrics.Rate),
 		SuccessRate: successRate,
 		Done:        true,
 	})
