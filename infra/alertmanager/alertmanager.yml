@@ -22,17 +22,11 @@ receivers:
   - name: 'telegram'
     telegram_configs:
       - bot_token: '8304017367:AAH-AjoNBVWLV73cLHvc3CO7s-g5xwvswOA'
-        chat_id: -4829704277
+        chat_id: -1002525596720
         parse_mode: ''
         message: |
-          🔔 {{ .CommonAnnotations.summary }}
-
-          📛 Severity: {{ .CommonLabels.severity }}
-          📝 Description:
-          {{ .CommonAnnotations.description }}
-
-          🔗 View in Prometheus:
-          {{ .CommonAnnotations.runbook_url }}
+          {{ .CommonAnnotations.summary }}
+          📝 Description: {{ .CommonAnnotations.description }}
 
 inhibit_rules:
   - source_match:

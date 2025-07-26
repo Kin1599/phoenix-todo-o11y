@@ -15,7 +15,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 2,
   "links": [],
   "panels": [
     {
@@ -630,10 +630,6 @@
               {
                 "color": "green",
                 "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -708,5 +704,5 @@
   "timezone": "",
   "title": "CockroachDB Overview",
   "uid": "032325fa-648f-456a-aa73-5a7554259fb5",
-  "version": 7
+  "version": 1
 }

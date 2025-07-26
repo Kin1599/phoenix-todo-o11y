@@ -382,7 +382,6 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "displayName": "{{method}} {{path}}",
           "placement": "bottom",
           "showLegend": true
         },
@@ -396,7 +395,8 @@
       "targets": [
         {
           "expr": "topk(5, sum by (method, path) (rate(todo_task_manager_prom_ex_phoenix_http_requests_total[30s])))",
-          "refId": "A"
+          "refId": "A",
+          "legendFormat": "{{ method }} {{ path }}"
         }
       ],
       "title": "RPS Growth Over Time",
@@ -571,7 +571,8 @@
       "targets": [
         {
           "expr": "histogram_quantile(0.99, sum(rate(todo_task_manager_prom_ex_phoenix_http_request_duration_milliseconds_bucket[1m])) by (le))",
-          "refId": "D"
+          "refId": "D",
+          "legendFormat": "p99 HTTP Latency"
         }
       ],
       "title": "p99 Latency (ms)",
@@ -861,7 +862,8 @@
       "targets": [
         {
           "expr": "topk(5, sum by (status) (rate(todo_task_manager_prom_ex_phoenix_http_requests_total[1m])))",
-          "refId": "J"
+          "refId": "J",
+          "legendFormat":"{{ status }}"
         }
       ],
       "title": "Response Status Codes Over Time",
