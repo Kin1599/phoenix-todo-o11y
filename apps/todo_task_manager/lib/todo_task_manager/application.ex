@@ -7,6 +7,9 @@ defmodule TodoTaskManager.Application do
 
   @impl true
   def start(_type, _args) do
+    OpentelemetryPhoenix.setup()
+    OpentelemetryEcto.setup([:todo_task_manager, TodoTaskManager.Repo])
+
     children = [
       TodoTaskManagerWeb.Telemetry,
       TodoTaskManager.Repo,

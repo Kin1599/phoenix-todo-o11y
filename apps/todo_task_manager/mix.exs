@@ -61,7 +61,13 @@ defmodule TodoTaskManager.MixProject do
       {:ex_json_schema, "~> 0.9"},
       {:poison, "~> 3.1"},
       {:guardian, "~> 2.0"},
-      {:prom_ex, "~> 1.9"}
+      {:prom_ex, "~> 1.9"},
+      {:telemetry, "~> 1.2"},
+      {:opentelemetry_ecto, "~> 1.1"},
+      {:opentelemetry_phoenix, "~> 1.1"},
+      {:opentelemetry, "~> 1.2"},
+      {:opentelemetry_exporter, "~> 1.0"},
+      {:opentelemetry_api, "~> 1.2"}
     ]
   end
 

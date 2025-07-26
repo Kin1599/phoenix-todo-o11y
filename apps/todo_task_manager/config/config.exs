@@ -74,6 +74,15 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :opentelemetry_exporter,
+  otlp_protocol: :grpc,
+  otlp_endpoint: "http://jaeger:4317"
+
+config :opentelemetry,
+  resource: [
+    service: %{name: "todo_task_manager"}
+  ]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
