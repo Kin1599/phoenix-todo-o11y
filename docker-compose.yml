@@ -63,6 +63,23 @@ services:
       - "9093:9093"
     volumes:
       - ./infra/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
-    
+  o11y-platform:
+    build:
+      context: ./apps/o11y-platform
+    ports:
+      - "80:80"
+    restart: unless-stopped
+
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
 volumes:
   cockroach-data:
+  portainer_data:

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>🔍 O11ySheet Platform</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🔍 O11ySheet Platform</h1>
+
+    <div class="section green">
+      <h2>🚀 Основные сервисы</h2>
+      <div class="grid">
+        <a href="#" onclick="navigate(':4000/swagger/index.html#/')" class="card">📄 TodoTask Swagger</a>
+        <a href="#" onclick="navigate(':8081')" class="card">🔥 Load Generator</a>
+        <a href="#" onclick="navigate(':4000/api/ping')" class="card">💚 Health Check</a>
+      </div>
+
+      <div class="accordion">
+        <button onclick="toggleMetrics()">📊 Prometheus Metrics ▼</button>
+        <div id="metrics-list" class="hidden">
+          <div class="metrics-grid">
+            <div class="metric-card" onclick="navigate(':4000/metrics')">
+              <span>📦</span>
+              <strong>todo_task_manager</strong><br><small>(elixir)</small>
+            </div>
+            <div class="metric-card" onclick="navigate(':8081/metrics')">
+              <span>🚀</span>
+              <strong>load-generator</strong>
+            </div>
+            <div class="metric-card" onclick="navigate(':8080/_status/vars')">
+              <span>🗃️</span>
+              <strong>cockroachdb</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section blue">
+      <h2>📊 Мониторинг и Алерты</h2>
+      <div class="grid">
+        <a href="#" onclick="navigate(':3000')" class="card">📉 Grafana</a>
+        <a href="#" onclick="navigate(':9090/query')" class="card">📡 Prometheus</a>
+        <a href="#" onclick="navigate(':9093/#/alerts')" class="card">🚨 Alertmanager</a>
+      </div>
+    </div>
+
+    <div class="section yellow">
+      <h2>🧭 Администрирование</h2>
+      <div class="grid">
+        <a href="#" onclick="navigate(':8080/#/overview/list')" class="card">🛢️ Cockroach Admin</a>
+        <a href="#" onclick="navigate(':9000')" class="card">⚓ Portainer</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>📚 Документация: <a href="/docs">/docs</a> | <a href="/readme">README</a></p>
+  </footer>
+
+  <script>
+    const BASE_URL = "http://localhost";
+
+    function navigate(path) {
+      window.location.href = `${BASE_URL}${path}`;
+    }
+
+    function toggleMetrics() {
+      const div = document.getElementById("metrics-list");
+      div.classList.toggle("hidden");
+    }
+  </script>
+</body>
+</html>
