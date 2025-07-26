@@ -1,0 +1,10 @@
+apiVersion: 1
+
+providers:
+  - name: 'o11y-dashboard'
+    orgId: 1
+    folder: ''
+    type: file
+    options:
+      path: /etc/grafana/provisioning/dashboards
+      foldersFromFilesStructure: false
