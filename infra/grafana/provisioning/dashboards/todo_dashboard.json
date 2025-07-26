@@ -395,8 +395,8 @@
       "targets": [
         {
           "expr": "topk(5, sum by (method, path) (rate(todo_task_manager_prom_ex_phoenix_http_requests_total[10s])))",
-          "refId": "A",
-          "legendFormat": "{{ method }} {{ path }}"
+          "legendFormat": "{{ method }} {{ path }}",
+          "refId": "A"
         }
       ],
       "title": "RPS Growth Over Time",
@@ -545,7 +545,112 @@
           },
           "unit": "ms"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "GET /api/ping"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "POST /api/register"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "POST /api/login"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "DELETE /api/tasks"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PUT /api/tasks"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "GET api/tasks"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "GET /metrics"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 6,
@@ -570,9 +675,9 @@
       "pluginVersion": "12.1.0",
       "targets": [
         {
-          "expr": "histogram_quantile(0.99, sum(rate(todo_task_manager_prom_ex_phoenix_http_request_duration_milliseconds_bucket[1m])) by (le))",
-          "refId": "D",
-          "legendFormat": "p99 HTTP Latency"
+          "expr": "histogram_quantile(0.99, sum by (le, method, path) (rate(todo_task_manager_prom_ex_phoenix_http_request_duration_milliseconds_bucket[1m])))",
+          "legendFormat": "{{ method }} {{ path }}",
+          "refId": "D"
         }
       ],
       "title": "p99 Latency (ms)",
@@ -862,8 +967,8 @@
       "targets": [
         {
           "expr": "topk(5, sum by (status) (rate(todo_task_manager_prom_ex_phoenix_http_requests_total[1m])))",
-          "refId": "J",
-          "legendFormat":"{{ status }}"
+          "legendFormat": "{{ status }}",
+          "refId": "J"
         }
       ],
       "title": "Response Status Codes Over Time",
@@ -889,5 +994,5 @@
   "timezone": "browser",
   "title": "ToDo Task Manager",
   "uid": "todo-task-manager",
-  "version": 40
+  "version": 5
 }
