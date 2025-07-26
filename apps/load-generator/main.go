@@ -9,6 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	vegeta "github.com/tsenart/vegeta/v12/lib"
+
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 type AttackRequest struct {
@@ -34,10 +37,31 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
+// Prometheus metrics
+var (
+	requestsTotal = prometheus.NewCounter(prometheus.CounterOpts{
+		Name: "loadgen_requests_total", Help: "Total requests sent",
+	})
+	requestsSuccess = prometheus.NewCounter(prometheus.CounterOpts{
+		Name: "loadgen_requests_success_total", Help: "Successful requests",
+	})
+	requestsFail = prometheus.NewCounter(prometheus.CounterOpts{
+		Name: "loadgen_requests_fail_total", Help: "Failed requests",
+	})
+	latencyHistogram = prometheus.NewHistogram(prometheus.HistogramOpts{
+		Name:    "loadgen_response_latency_seconds",
+		Help:    "Histogram of response latencies",
+		Buckets: prometheus.ExponentialBuckets(0.001, 2, 15), // 1ms -> ~16s
+	})
+)
+
 func main() {
+	prometheus.MustRegister(requestsTotal, requestsSuccess, requestsFail, latencyHistogram)
+
 	r := gin.Default()
 	r.GET("/", servePage)
 	r.GET("/ws", handleWebSocket)
+	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	fmt.Println("Listening on http://localhost:8081")
 	r.Run(":8081")
@@ -113,10 +137,15 @@ func handleWebSocket(c *gin.Context) {
 
 	for res := range resCh {
 		total++
+		requestsTotal.Inc()
+		latencyHistogram.Observe(res.Latency.Seconds())
+
 		if res.Code >= 200 && res.Code < 300 {
 			success++
+			requestsSuccess.Inc()
 		} else {
 			fail++
+			requestsFail.Inc()
 		}
 	}
 	close(done)
