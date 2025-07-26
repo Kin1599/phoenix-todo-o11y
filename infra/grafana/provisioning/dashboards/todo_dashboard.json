@@ -306,7 +306,7 @@
       "pluginVersion": "12.1.0",
       "targets": [
         {
-          "expr": "sum(rate(todo_task_manager_prom_ex_phoenix_http_requests_total[15s]))",
+          "expr": "sum(rate(todo_task_manager_prom_ex_phoenix_http_requests_total[30s]))",
           "refId": "F"
         }
       ],
@@ -394,7 +394,7 @@
       "pluginVersion": "12.1.0",
       "targets": [
         {
-          "expr": "topk(5, sum by (method, path) (rate(todo_task_manager_prom_ex_phoenix_http_requests_total[10s])))",
+          "expr": "topk(5, sum by (method, path) (rate(todo_task_manager_prom_ex_phoenix_http_requests_total[30s])))",
           "legendFormat": "{{ method }} {{ path }}",
           "refId": "A"
         }

@@ -2,14 +2,14 @@ groups:
 - name: service_alerts
   rules:
   - alert: HighLatency
-    expr: histogram_quantile(0.99, rate(loadgen_response_latency_seconds_bucket[1m])) > 0.5
+    expr: histogram_quantile(0.99,sum(rate(todo_task_manager_prom_ex_phoenix_http_request_duration_milliseconds_bucket{path="/api/login",method="POST"}[1m])) by (le)) > 0.5
     for: 30s
     labels:
       severity: critical
     annotations:
       summary: "🚨🚨🚨 High Latency Alert (p99)"
       description: |
-        The 99th percentile latency exceeded 500ms over the last minute.
+        The 99th percentile latency for the endpoint POST /api/login exceeded 500ms over the last minute.
 
   - alert: HighDBLoad
     expr: sum(rate(sql_service_latency_count[1m])) > 100
