@@ -1,0 +1,35 @@
+groups:
+- name: service_alerts
+  rules:
+  - alert: HighLatency
+    expr: histogram_quantile(0.99, rate(loadgen_response_latency_seconds_bucket[1m])) > 0.5
+    for: 30s
+    labels:
+      severity: critical
+    annotations:
+      summary: "🚨 High Latency Alert (p99)"
+      description: |
+        The 99th percentile latency exceeded 500ms over the last minute.
+        🔎 Runbook: http://localhost:9090/query?g0.expr=histogram_quantile%280.99%2C+rate%28loadgen_response_latency_seconds_bucket%5B1m%5D%29%29+%3E+0.5&g0.show_tree=0&g0.tab=graph&g0.range_input=1h&g0.res_type=auto&g0.res_density=medium&g0.display_mode=lines&g0.show_exemplars=0
+
+  - alert: HighDBLoad
+    expr: sum(rate(sql_service_latency_count[1m])) > 100
+    for: 30s
+    labels:
+      severity: warning
+    annotations:
+      summary: "⚠️ High CockroachDB Load"
+      description: |
+        Execution rate exceeds 100 RPS.
+        🔎 Runbook: http://localhost:9090/query?g0.expr=sum%28rate%28sql_service_latency_count%5B1m%5D%29%29&g0.show_tree=0&g0.tab=graph&g0.range_input=1h&g0.res_type=auto&g0.res_density=medium&g0.display_mode=lines&g0.show_exemplars=0
+
+  - alert: AlwaysFiring
+    expr: vector(1)
+    for: 10s
+    labels:
+      severity: info
+    annotations:
+      summary: "🔔 This is a test alert from Prometheus"
+      description: |
+        This alert is always firing and used to test the Alertmanager pipeline.
+        🔎 Runbook: http://localhost:9090/graph?g0.expr=vector(1)&g0.tab=1
