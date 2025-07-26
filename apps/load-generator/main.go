@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"sync/atomic"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -37,8 +38,12 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
-// Prometheus metrics
 var (
+	currentRPS = atomic.Uint64{}
+	rpsGauge   = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "loadgen_rps_current",
+		Help: "Current RPS measured during test run",
+	})
 	requestsTotal = prometheus.NewCounter(prometheus.CounterOpts{
 		Name: "loadgen_requests_total", Help: "Total requests sent",
 	})
@@ -51,12 +56,12 @@ var (
 	latencyHistogram = prometheus.NewHistogram(prometheus.HistogramOpts{
 		Name:    "loadgen_response_latency_seconds",
 		Help:    "Histogram of response latencies",
-		Buckets: prometheus.ExponentialBuckets(0.001, 2, 15), // 1ms -> ~16s
+		Buckets: prometheus.ExponentialBuckets(0.001, 2, 15),
 	})
 )
 
 func main() {
-	prometheus.MustRegister(requestsTotal, requestsSuccess, requestsFail, latencyHistogram)
+	prometheus.MustRegister(requestsTotal, requestsSuccess, requestsFail, latencyHistogram, rpsGauge)
 
 	r := gin.Default()
 	r.GET("/", servePage)
@@ -114,9 +119,16 @@ func handleWebSocket(c *gin.Context) {
 	done := make(chan struct{})
 
 	go func() {
+		var lastTotal uint64
 		for {
 			select {
 			case <-ticker.C:
+				newTotal := total
+				delta := newTotal - lastTotal
+				lastTotal = newTotal
+				currentRPS.Store(delta)
+				rpsGauge.Set(float64(delta))
+
 				successRate := 0.0
 				if total > 0 {
 					successRate = (float64(success) / float64(total)) * 100
@@ -125,7 +137,7 @@ func handleWebSocket(c *gin.Context) {
 					Total:       total,
 					Success:     success,
 					Fail:        fail,
-					RPS:         req.RPS,
+					RPS:         int(delta),
 					SuccessRate: successRate,
 					Done:        false,
 				})
@@ -139,7 +151,6 @@ func handleWebSocket(c *gin.Context) {
 		total++
 		requestsTotal.Inc()
 		latencyHistogram.Observe(res.Latency.Seconds())
-
 		if res.Code >= 200 && res.Code < 300 {
 			success++
 			requestsSuccess.Inc()
@@ -158,7 +169,7 @@ func handleWebSocket(c *gin.Context) {
 		Total:       total,
 		Success:     success,
 		Fail:        fail,
-		RPS:         req.RPS,
+		RPS:         int(currentRPS.Load()),
 		SuccessRate: successRate,
 		Done:        true,
 	})
