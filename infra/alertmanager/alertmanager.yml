@@ -1,0 +1,42 @@
+global:
+  resolve_timeout: 1m
+
+route:
+  receiver: 'telegram'
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 30s
+  repeat_interval: 1m
+  routes:
+    - match:
+        severity: info
+      receiver: telegram
+    - match:
+        severity: warning
+      receiver: telegram
+    - match:
+        severity: critical
+      receiver: telegram
+
+receivers:
+  - name: 'telegram'
+    telegram_configs:
+      - bot_token: '8304017367:AAH-AjoNBVWLV73cLHvc3CO7s-g5xwvswOA'
+        chat_id: -4829704277
+        parse_mode: ''
+        message: |
+          🔔 {{ .CommonAnnotations.summary }}
+
+          📛 Severity: {{ .CommonLabels.severity }}
+          📝 Description:
+          {{ .CommonAnnotations.description }}
+
+          🔗 View in Prometheus:
+          {{ .CommonAnnotations.runbook_url }}
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname']
