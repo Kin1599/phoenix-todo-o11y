@@ -60,7 +60,8 @@ defmodule TodoTaskManager.MixProject do
       {:phoenix_swagger, "~> 0.8"},
       {:ex_json_schema, "~> 0.9"},
       {:poison, "~> 3.1"},
-      {:guardian, "~> 2.0"}
+      {:guardian, "~> 2.0"},
+      {:prom_ex, "~> 1.9"}
     ]
   end
 

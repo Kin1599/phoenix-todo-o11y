@@ -15,7 +15,8 @@ defmodule TodoTaskManager.Application do
       # Start a worker by calling: TodoTaskManager.Worker.start_link(arg)
       # {TodoTaskManager.Worker, arg},
       # Start to serve requests, typically the last entry
-      TodoTaskManagerWeb.Endpoint
+      TodoTaskManagerWeb.Endpoint,
+      TodoTaskManager.PromEx
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

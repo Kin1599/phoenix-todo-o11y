@@ -84,4 +84,9 @@ defmodule TodoTaskManagerWeb.Router do
       }
     }
   end
+
+  # --- Prometheus metrics ---
+  if Mix.env() == :dev or Mix.env() == :prod do
+    forward "/metrics", PromEx.Plug, prom_ex_module: TodoTaskManager.PromEx
+  end
 end
