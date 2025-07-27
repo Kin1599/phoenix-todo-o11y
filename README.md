@@ -2,6 +2,17 @@
 
 O11y Platform — комплексная демонстрационная платформа для практики в области Observability: метрик, алертинга и нагрузочного тестирования.
 
+## Стек технологий
+
+1. Сервис – Elixir + Phoenix
+2. БД – CocroachDB
+3. Нагрузочный сервис – Go + Vegeta
+4. o11y-platform – HTML, CSS, JavaScript
+5. o11y – Prometheus, Grafana, AlertManager, Portainer
+6. Infra – Docker, Docker Compose
+7. Tracing – Jaeger
+
+
 ## Ссылки на доступные сервисы
 
 | Название                      | URL                                                           | Описание                                                       |
