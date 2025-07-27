@@ -6,13 +6,13 @@
       "in": "header"
     }
   },
-  "basePath": "/",
-  "consumes": [
-    "application/json"
-  ],
   "produces": [
     "application/json"
   ],
+  "consumes": [
+    "application/json"
+  ],
+  "basePath": "/",
   "swagger": "2.0",
   "paths": {
     "/api/tasks/{id}": {
@@ -173,7 +173,24 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [],
+        "parameters": [
+          {
+            "type": "integer",
+            "required": false,
+            "name": "limit",
+            "in": "query",
+            "description": "Number of tasks per page",
+            "default": 10
+          },
+          {
+            "type": "integer",
+            "required": false,
+            "name": "offset",
+            "in": "query",
+            "description": "Page number (starting from 0)",
+            "default": 0
+          }
+        ],
         "operationId": "TodoTaskManagerWeb.TaskApiController.index",
         "description": "Returns tasks of authenticated user"
       }
@@ -266,6 +283,70 @@
     "http"
   ],
   "definitions": {
+    "TaskUpdate": {
+      "type": "object",
+      "title": "TaskUpdate",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description"
+        }
+      },
+      "example": {
+        "title": "Read docs UPDATED",
+        "status": "done"
+      },
+      "description": "Task update schema"
+    },
+    "TaskDelete": {
+      "type": "object",
+      "title": "TaskDelete",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Confirmation message"
+        }
+      },
+      "example": {
+        "message": "Task deleted"
+      },
+      "description": "Task deletion confirmation"
+    },
+    "TaskCreate": {
+      "type": "object",
+      "title": "TaskCreate",
+      "required": [
+        "title"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description"
+        }
+      },
+      "example": {
+        "title": "Read docs",
+        "status": "pending",
+        "description": "Learn Phoenix Swagger"
+      },
+      "description": "Task creation schema"
+    },
     "TokenResponse": {
       "type": "object",
       "title": "TokenResponse",
@@ -367,70 +448,6 @@
         "timestamp": "2024-07-24T20:20:20Z",
         "status": "ok"
       }
-    },
-    "TaskDelete": {
-      "type": "object",
-      "title": "TaskDelete",
-      "properties": {
-        "message": {
-          "type": "string",
-          "description": "Confirmation message"
-        }
-      },
-      "example": {
-        "message": "Task deleted"
-      },
-      "description": "Task deletion confirmation"
-    },
-    "TaskUpdate": {
-      "type": "object",
-      "title": "TaskUpdate",
-      "properties": {
-        "title": {
-          "type": "string",
-          "description": "Title"
-        },
-        "status": {
-          "type": "string",
-          "description": "Status"
-        },
-        "description": {
-          "type": "string",
-          "description": "Description"
-        }
-      },
-      "example": {
-        "title": "Read docs UPDATED",
-        "status": "done"
-      },
-      "description": "Task update schema"
-    },
-    "TaskCreate": {
-      "type": "object",
-      "title": "TaskCreate",
-      "required": [
-        "title"
-      ],
-      "properties": {
-        "title": {
-          "type": "string",
-          "description": "Title"
-        },
-        "status": {
-          "type": "string",
-          "description": "Status"
-        },
-        "description": {
-          "type": "string",
-          "description": "Description"
-        }
-      },
-      "example": {
-        "title": "Read docs",
-        "status": "pending",
-        "description": "Learn Phoenix Swagger"
-      },
-      "description": "Task creation schema"
     },
     "Task": {
       "type": "object",

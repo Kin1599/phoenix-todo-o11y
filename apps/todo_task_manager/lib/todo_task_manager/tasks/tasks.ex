@@ -4,8 +4,14 @@ defmodule TodoTaskManager.Tasks do
   alias TodoTaskManager.Tasks.Task
   alias TodoTaskManager.Repo
 
-  def list_tasks(user_id) do
-    Repo.all(from t in Task, where: t.user_id == ^user_id)
+  def list_tasks(user_id, limit, offset) do
+    Repo.all(
+      from t in Task,
+        where: t.user_id == ^user_id,
+        limit: ^limit,
+        offset: ^offset,
+        order_by: [desc: t.inserted_at]
+    )
   end
 
   def get_task(user_id, id), do: Repo.get_by(Task, id: id, user_id: user_id)

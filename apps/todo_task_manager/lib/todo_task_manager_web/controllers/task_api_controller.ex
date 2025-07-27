@@ -11,13 +11,21 @@ defmodule TodoTaskManagerWeb.TaskApiController do
     description("Returns tasks of authenticated user")
     produces("application/json")
     security([%{Bearer: []}])
+    parameters do
+      limit :query, :integer, "Number of tasks per page", required: false, default: 10
+      offset :query, :integer, "Page number (starting from 0)", required: false, default: 0
+    end
     response(200, "List of tasks", Schema.array(:Task))
     response(401, "Unauthorized")
   end
 
-  def index(conn, _params) do
+  def index(conn, params) do
     user = conn.assigns.current_user
-    tasks = Tasks.list_tasks(user.id)
+
+    limit = Map.get(params, "limit", "10") |> String.to_integer()
+    offset = Map.get(params, "offset", "0") |> String.to_integer()
+
+    tasks = Tasks.list_tasks(user.id, limit, offset)
     json(conn, tasks)
   end
 
