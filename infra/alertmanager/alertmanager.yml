@@ -21,8 +21,8 @@ route:
 receivers:
   - name: 'telegram'
     telegram_configs:
-      - bot_token: '8304017367:AAH-AjoNBVWLV73cLHvc3CO7s-g5xwvswOA'
-        chat_id: -1002525596720
+      - bot_token: '<TELEGRAM_BOT_TOKEN>'
+        chat_id: CHAT_ID
         parse_mode: ''
         message: |
           {{ .CommonAnnotations.summary }}
