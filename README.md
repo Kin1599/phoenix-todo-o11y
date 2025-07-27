@@ -17,16 +17,16 @@ O11y Platform — комплексная демонстрационная пла
 
 | Название                      | URL                                                           | Описание                                                       |
 | ----------------------------- | ------------------------------------------------------------- | -------------------------------------------------------------- |
-| **Todo Task Manager Swagger** | [Swagger](http://158.160.178.32:4000/swagger/index.html#/)         | REST API для задач, регистрация, логин, документация           |
-| **Load Generator**            | [Load Generator](http://158.160.178.32:8081/)                      | UI для генерации нагрузки на любой сервис, профили нагрузок    |
-| **Database Admin Panel**      | [Database Admin Panel](http://158.160.178.32:8080/#/overview/list) | Веб-интерфейс CockroachDB: мониторинг состояния БД, статистика |
-| **Grafana**                   | [Grafana](http://158.160.178.32:3000/)                             | Дашборды для всех метрик и алертов платформы                   |
-| **Prometheus**                | [Prometheus](http://158.160.178.32:9090/query)                     | Сбор и хранение всех метрик, PromQL-запросы                    |
-| **AlertManager**              | [AlertManager](http://158.160.178.32:9093/#/alerts)                | Менеджер алертов, интеграция с Telegram                        |
-| **O11y Platform Main Page**   | [O11y-platform](http://158.160.178.32/#)                        | Портал платформы и навигация                                   |
-| **Elixir Metrics**            | [Elixir /metrics](http://158.160.178.32:4000/metrics)              | Метрики приложения (todo)                                      |
-| **Database Metrics**          | [DB /\_status/vars](http://158.160.178.32:8080/_status/vars)       | Метрики базы данных CockroachDB                                |
-| **Load Generator Metrics**    | [LoadGen /metrics](http://158.160.178.32:8081/metrics)             | Метрики генератора нагрузки                                    |
+| **Todo Task Manager Swagger** | [Swagger](http://localhost:4000/swagger/index.html#/)         | REST API для задач, регистрация, логин, документация           |
+| **Load Generator**            | [Load Generator](http://localhost:8081/)                      | UI для генерации нагрузки на любой сервис, профили нагрузок    |
+| **Database Admin Panel**      | [Database Admin Panel](http://localhost:8080/#/overview/list) | Веб-интерфейс CockroachDB: мониторинг состояния БД, статистика |
+| **Grafana**                   | [Grafana](http://localhost:3000/)                             | Дашборды для всех метрик и алертов платформы                   |
+| **Prometheus**                | [Prometheus](http://localhost:9090/query)                     | Сбор и хранение всех метрик, PromQL-запросы                    |
+| **AlertManager**              | [AlertManager](http://localhost:9093/#/alerts)                | Менеджер алертов, интеграция с Telegram                        |
+| **O11y Platform Main Page**   | [O11y-platform](http://localhost/#)                        | Портал платформы и навигация                                   |
+| **Elixir Metrics**            | [Elixir /metrics](http://localhost:4000/metrics)              | Метрики приложения (todo)                                      |
+| **Database Metrics**          | [DB /\_status/vars](http://localhost:8080/_status/vars)       | Метрики базы данных CockroachDB                                |
+| **Load Generator Metrics**    | [LoadGen /metrics](http://localhost:8081/metrics)             | Метрики генератора нагрузки                                    |
 | **Telegram алерты**           | [@o11y\_alerts](https://t.me/o11y_alerts)                     | Уведомления по алертам (latency, RPS)                          |
 
 ## Мониторинг и метрики
