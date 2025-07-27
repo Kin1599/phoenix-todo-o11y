@@ -36,6 +36,11 @@ O11y Platform — комплексная демонстрационная пла
 
 - Алерты настраиваются в Prometheus/AlertManager, уведомления — в Telegram
 
+## Доступы к сервисам
+
+1. Grafana admin/admin
+2. Portainer admin/qwertyasdfgh
+
 ## Проверить алертинг
 
 ### ❗️ Обязательно: в заголовках должен быть Content-Type: application/json
